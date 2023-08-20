@@ -2,8 +2,15 @@ from pydantic import BaseModel
 from typing import Optional, List
 
 
+class TokenUsage(BaseModel):
+	completion_tokens: int
+	prompt_tokens: int
+	total_tokens: int
+
+
 class Message(BaseModel):
-	bot: bool # True if message is sent by bot
+	role: str
+	content: str
 	timestamp: int
-	text: str
 	user_id: Optional[str]
+	token_usage: Optional[TokenUsage] # dict of token usage for the response
