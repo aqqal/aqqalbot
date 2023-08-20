@@ -3,10 +3,6 @@ from typing import List, Optional
 from aqqalbot.models import Chat, Message
 
 
-class NewChatRequest(BaseModel):
-	chat: Chat
-
-
 class NewChatResponse(BaseModel):
 	chat_id: str
 
@@ -22,6 +18,7 @@ class NewMessageRequest(BaseModel):
 
 class NewMessageResponse(BaseModel):
 	response: str
+	chat_id: str
 	chat: Chat
 
 
