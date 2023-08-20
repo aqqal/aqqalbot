@@ -28,6 +28,12 @@ class ChatManager():
 
 	@property
 	def chat(self) -> dict:
+		"""
+		The chat document in mongodb.
+		Note: A database query for the chat with the given id is called on eachproperty access.
+		
+		"""
+
 		chat = self.chats_collection.find_one({ "_id": ObjectId(self.chat_id) })
 		return chat
 
@@ -39,7 +45,6 @@ class ChatManager():
 		
 	
 	def add_message(self, new_message: Message):
-		new_message = new_message.dict()
 		self.chats_collection.find_one_and_update({ "_id": self.chat_id }, { "messages": { "$push": new_message.dict() } })
 
 
