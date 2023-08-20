@@ -1,8 +1,10 @@
 from fastapi import FastAPI
 from app.auth import validate_token
+from app.routes.chats.router import router as chats_router
 
 app = FastAPI(
     title="Aqqalbot API Service",
     description="API service for Aqqal chatbot, Aqqalbot",
-    dependencies=[Depends(validate_token)]
 )
+
+app.include_router(chats_router)
