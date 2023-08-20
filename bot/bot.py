@@ -5,7 +5,7 @@ import time
 from bot.config import initial_params, openai_api_key
 
 
-def generate_bot_message(messages: list, system: bool = False, **custom_params) -> Tuple[Message, dict]:
+def generate_bot_message(messages: list, **custom_params) -> Tuple[Message, dict]:
 	"""
 	Generates a response to a list of messages using the OpenAI API.
 	Returns a 2 item tuple with a Message object and a dict of the token usage for the response.
