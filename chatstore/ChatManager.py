@@ -12,8 +12,13 @@ class ChatManager():
 		if not chat_id:
 			
 			# create a new chat on empty instance creation
-			new_chat = self.__create_chat__()
-			chat_id = self.chats_collection.insert_one(new_chat).inserted_id
+			try:
+				new_chat = self.__create_chat__()	
+				chat_id = self.chats_collection.insert_one(new_chat).inserted_id
+				logger.info("Created new chat with id: " + str(chat_id))
+			except Exception as e:
+				logger.error("Error while creating new chat: " + str(e))
+				raise e
 				
 		if not self.chat:
 			raise ValueError("Could not find chat with id: " + chat_id)
@@ -22,7 +27,7 @@ class ChatManager():
 
 
 	@property
-	def chat(self):
+	def chat(self) -> dict:
 		chat = self.chats_collection.find_one({ "_id": ObjectId(self.chat_id) })
 		return chat
 
@@ -39,8 +44,13 @@ class ChatManager():
 
 
 	def get_messages(self, for_completion = False, last_n: int = None):
-		messages = self.chat["messages"]
-
+		try:
+			messages = self.chat["messages"]
+			logger.info("DB Read messages from chat with id: " + self.chat_id)
+		except Exception as e:
+			logger.error("Error while reading messages from chat with id: " + self.chat_id + " : " + str(e))
+			raise e
+		
 		if last_n:
 			messages = messages[len(messages) - last_n:]
 

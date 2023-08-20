@@ -35,7 +35,14 @@ def generate_bot_message(messages: list, system: bool = False, **custom_params) 
 
 
 def get_openai_response(messages, **completion_params):
-	response = openai.ChatCompletion.create(api_key=openai_api_key, messages=messages, **completion_params)
+	try:
+		logger.info("Sending OpenAI API completion request")
+		response = openai.ChatCompletion.create(api_key=openai_api_key, messages=messages, **completion_params)
+		logger.info("Received OpenAI API completion response")
+	except Exception as e:
+		logger.error("Error while sending OpenAI API completion request: " + str(e))
+		raise e
+
 	return response
 
 
