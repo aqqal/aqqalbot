@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 from app.main import app
 from app.routes.chats.models import NewChatResponse, GetChatResponse, NewMessageResponse
-
+from tests.logger import logger as test_logger
 from dotenv import load_dotenv
 import os
 import pytest
@@ -9,7 +9,7 @@ import pytest
 
 load_dotenv()
 
-token = os.getenv("CLIENT-TOKEN")
+token = os.getenv("CLIENT_KEY")
 HEADERS = {
 	'Authorization': f'Bearer {token}'
 }
@@ -22,13 +22,12 @@ def new_chat():
 		"/chats",
 		headers=HEADERS
 	)
+	test_logger.info("Received response for POST /chats: " + str(response.json()))
 	yield {
 		"new_chat_response": response,
 		"chat_id": response.json()["chat_id"],
 		"new_message": {
-			"bot": True,
-			"timestamp": 123456789,
-			"text": "Hello, I am aqqalbot",
+			"message_content": "Hello, I am aqqalbot",
 		}
 	}
 
@@ -48,6 +47,7 @@ def test_get_chat(new_chat):
 		f"/chats/{new_chat['chat_id']}",
 		headers=HEADERS
 	)
+	test_logger.info(f"Received response for GET /chats/{new_chat['chat_id']}: " + str(response.json()))
 
 	assert response.status_code == 200
 	
@@ -57,15 +57,14 @@ def test_get_chat(new_chat):
 
 @pytest.mark.order(3)
 def test_add_message(new_chat):
-	json = {
-		"message": new_chat["new_message"]
-	}
+	json = new_chat["new_message"]
 
 	response = client.post(
 		f"/chats/{new_chat['chat_id']}",
 		json=json,
 		headers=HEADERS
 	)
+	test_logger.info(f"Received response for POST /chats/{new_chat['chat_id']}: " + str(response.json()))
 
 	assert response.status_code == 200
 	
