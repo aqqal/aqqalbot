@@ -10,5 +10,7 @@ openai_api_key = os.getenv('OPENAI_API_KEY')
 
 initial_params = {}
 
-with open("params.json", "r") as f:
+dir_path = os.path.dirname(os.path.abspath(__file__))
+
+with open(dir_path + '//params.json', "r") as f:
 	initial_params = json.load(f)
