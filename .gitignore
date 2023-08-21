@@ -3,6 +3,8 @@
 /Scripts
 /share
 /etc
+*pycache__/
 
 *.cfg
 *.env
+*.log
