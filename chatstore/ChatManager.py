@@ -1,8 +1,8 @@
 from chatstore.config import db as mongo_db
 from models.Chat import Chat, Message
 from bot.bot import generate_system_message
-from ..logger import logger
-from pymongo.objectid import ObjectId
+from app.logger import logger
+from bson.objectid import ObjectId
 
 
 class ChatManager():
