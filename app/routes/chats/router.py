@@ -3,17 +3,21 @@ from bot.bot import generate_bot_message
 from app.auth import validate_token
 from chatstore.ChatManager import ChatManager
 
+from models.Message import Message
 from app.routes.chats.models import (
 	NewChatResponse,
 	NewMessageRequest,
 	NewMessageResponse
 )
 
+import time
+
 router = APIRouter(
+	prefix="/chats",
     dependencies=[Depends(validate_token)]
 )
 
-@router.post("/chat", response_model=NewChatResponse)
+@router.post("", response_model=NewChatResponse)
 def new_chat():
 	new_chat = ChatManager()
 	
@@ -21,23 +25,25 @@ def new_chat():
 		"chat_id": str(new_chat.chat_id)
 	}
 
-@router.get("/chats/{id}")
+@router.get("/{id}")
 def get_chat(id: str):
 	chat_manager = ChatManager(chat_id=id)
-	chat = chat_manager.chat.pop("_id").copy()
+	chat = chat_manager.chat
+	chat.pop("_id")
+	chat_copy = chat.copy()
 
 	return {
 		"chat_id": id,
 		"chat": chat
 	}
 
-@router.post("/chats/{id}", response_model=NewMessageResponse)
-def add_message(id: str, body=NewMessageRequest):
+@router.post("/{id}", response_model=NewMessageResponse)
+def add_message(id: str, body: NewMessageRequest):
 	# save message to chat and db
 	chat_manager = ChatManager(chat_id=id)
 	new_message = Message(
 		role="user",
-		content=body.message,
+		content=body.message_content,
 		timestamp=time.time()
 	)
 
@@ -50,12 +56,14 @@ def add_message(id: str, body=NewMessageRequest):
 
 	# save bot response
 	chat_manager.add_message(bot_response)
-	chat = chat_manager.chat.pop("_id").copy()
+	chat = chat_manager.chat
+	chat.pop("_id")
+	chat_copy = chat.copy()
 
 	return {
 		"response": bot_response.content,
 		"chat_id": id,
-		"chat": chat
+		"chat": chat_copy
 	}
 
 # --------Not implemented yet----------------

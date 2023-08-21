@@ -19,11 +19,12 @@ class ChatManager():
 			except Exception as e:
 				logger.error("Error while creating new chat: " + str(e))
 				raise e
-				
-		if not self.chat:
-			raise ValueError("Could not find chat with id: " + chat_id)
 		
 		self.chat_id = ObjectId(chat_id)
+		self.__chat = self.chats_collection.find_one({ "_id": ObjectId(self.chat_id) })
+		if not self.__chat:
+			raise ValueError("Could not find chat with id: " + chat_id)
+		
 
 
 	@property
@@ -45,15 +46,20 @@ class ChatManager():
 		
 	
 	def add_message(self, new_message: Message):
-		self.chats_collection.find_one_and_update({ "_id": self.chat_id }, { "messages": { "$push": new_message.dict() } })
+		try:
+			logger.info("ChatManager: DB Adding message to chat with id: " + str(self.chat_id))
+			self.chats_collection.find_one_and_update({ "_id": self.chat_id }, { "$push": { "messages": new_message.dict() } })
+		except Exception as e:
+			logger.error("Error while adding message to chat document with id: " + str(self.chat_id) + " : " + str(e))
+			raise e
 
 
 	def get_messages(self, for_completion = False, last_n: int = None):
 		try:
 			messages = self.chat["messages"]
-			logger.info("DB Read messages from chat with id: " + self.chat_id)
+			logger.info("DB Read messages from chat with id: " + str(self.chat_id))
 		except Exception as e:
-			logger.error("Error while reading messages from chat with id: " + self.chat_id + " : " + str(e))
+			logger.error("Error while reading messages from chat with id: " + str(self.chat_id) + " : " + str(e))
 			raise e
 		
 		if last_n:
