@@ -3,7 +3,7 @@ from bot.bot import generate_bot_message
 from app.auth import validate_token
 from chatstore.ChatManager import ChatManager
 
-from routes.chats.models import (
+from app.routes.chats.models import (
 	NewChatResponse,
 	NewMessageRequest,
 	NewMessageResponse
