@@ -2,6 +2,7 @@ import openai
 from models.Message import Message
 import time
 from bot.config import initial_params, openai_api_key
+from app.logger import logger
 
 
 def generate_bot_message(messages: list, **custom_params) -> Message:
