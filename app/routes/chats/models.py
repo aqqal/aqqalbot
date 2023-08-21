@@ -14,7 +14,7 @@ class GetChatResponse(BaseModel):
 
 
 class NewMessageRequest(BaseModel):
-	message: Message
+	message_content: str
 
 
 class NewMessageResponse(BaseModel):
