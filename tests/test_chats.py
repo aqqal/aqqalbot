@@ -16,7 +16,7 @@ HEADERS = {
 
 client = TestClient(app)
 
-@pytet.fixture(scope="module")
+@pytest.fixture(scope="module")
 def new_chat():
 	response = client.post(
 		"/chats",
