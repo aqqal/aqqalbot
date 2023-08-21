@@ -4,6 +4,7 @@
 /share
 /etc
 *pycache__/
+*pytest_cache/
 
 *.cfg
 *.env
