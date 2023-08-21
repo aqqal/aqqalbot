@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import List, Optional
-from aqqalbot.models import Chat, Message
+from models.Chat import Chat
+from models.Message import Message
 
 
 class NewChatResponse(BaseModel):

@@ -3,6 +3,12 @@ from bot.bot import generate_bot_message
 from app.auth import validate_token
 from chatstore.ChatManager import ChatManager
 
+from routes.chats.models import (
+	NewChatResponse,
+	NewMessageRequest,
+	NewMessageResponse
+)
+
 router = APIRouter(
     dependencies=[Depends(validate_token)]
 )
@@ -52,14 +58,16 @@ def add_message(id: str, body=NewMessageRequest):
 		"chat": chat
 	}
 
-@router.delete("/chats/{id}")
-def delete_chat(id: str):
-	pass
+# --------Not implemented yet----------------
 
-@router.delete("/chats")
-def delete_chats():
-	pass
+# @router.delete("/chats/{id}")
+# def delete_chat(id: str):
+# 	pass
 
-@router.patch("/chats/config", response_model=ChatConfigResponse)
-def config_chat(body=ChatConfigRequest):
-	pass
+# @router.delete("/chats")
+# def delete_chats():
+# 	pass
+
+# @router.patch("/chats/config", response_model=ChatConfigResponse)
+# def config_chat(body=ChatConfigRequest):
+# 	pass
