@@ -9,8 +9,8 @@ class TokenUsage(BaseModel):
 
 
 class Message(BaseModel):
-	role: str
+	id: str
+	bot: bool
 	content: str
-	timestamp: int
-	user_id: Optional[str]
+	context: Optional[str]
 	token_usage: Optional[TokenUsage] # dict of token usage for the response
