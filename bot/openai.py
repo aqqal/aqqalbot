@@ -4,7 +4,7 @@ from models.bot import Bot
 from bot.config import client
 from bot.logger import logger
 
-async def new_bot(model_id: str, prompt: str, name=None) -> Bot:
+async def create_new_bot(model_id: str, prompt: str, name=None) -> Bot:
 	"""
 	Creates a new OpenAI assistant from the given model and instructions
 	Returns a Bot object

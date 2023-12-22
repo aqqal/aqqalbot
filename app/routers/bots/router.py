@@ -13,7 +13,7 @@ from datastore.botstore_json import (
 	save_bot
 )
 
-from bot.openai import new_bot
+from bot.openai import create_new_bot
 from models.bot import Bot
 
 import time
