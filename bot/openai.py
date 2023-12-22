@@ -1,5 +1,5 @@
-from models.Chat import Bot, Chat
-from models.Message import Message
+from models.chat import Chat, Message
+from models.bot import Bot
 
 from bot.config import client
 from bot.logger import logger
