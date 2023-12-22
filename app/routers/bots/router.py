@@ -3,10 +3,17 @@ from app.auth import validate_token
 
 from bot.openai import new_bot
 
+from models.Chat import Bot
+
 from app.routers.bots.models import (
 	NewBotRequest,
 	UpdateBotRequest,
-	GetBotsResponse
+)
+
+from datastore.botstore_json import (
+	get_default_bot,
+	list_bots,
+	save_bot
 )
 
 import time
@@ -16,29 +23,78 @@ router = APIRouter(
     dependencies=[Depends(validate_token)]
 )
 
-@router.post("", response_model= Bot)
-def new_bot(body: NewBotRequest):
+@router.post("", response_model=Bot)
+async def new_bot(body: NewBotRequest):
 	"""
 	Creates a new bot
-
 	"""
 	
 	bot = await new_bot(body.model_id, body.prompt, body.name)
+	await save_bot(bot)
+
 	return bot 
 
-@router.get("", response_model=GetBotsResponse)
-def get_bots():
-	pass
+@router.get("", response_model=List[Bot])
+async def get_bots():
+	"""
+	Returns a list of all bots
+	"""
+
+	return list_bots()	
 
 
-@router.patch("/{id}", response_model=NewBotResponse)
-def update_bot(id: str, body: UpdateBotRequest):
-	pass
+@router.patch("/{id}", response_model=Bot)
+async def update_bot(id: str, body: UpdateBotRequest):
+	"""
+	Updates a bot by id
+	"""
 
-@router.get("/defaults", response_model=NewBotResponse)
+	bot = get_bot(id)
+	if not bot:
+		return HTTPException(status_code=404, detail="Bot not found")
+
+	if body.name:
+		bot.name = body.name
+
+	if body.prompt:
+		bot.prompt = body.prompt
+
+	if body.model_id:
+		bot.model_id = body.model_id
+
+	await save_bot(bot)
+
+	return bot
+
+
+@router.get("/default", response_model=Bot)
 def get_default_bot():
-	pass
+	"""
+	Returns the default bot
+	"""
 
-@router.patch("/defaults")
-def set_default_bot():
-	pass
+	return get_default_bot()
+
+
+@router.patch("/default", response_model=Bot)
+async def update_default_bot(body: UpdateBotRequest):
+	"""
+	Updates the default bot
+	"""
+
+	bot = get_default_bot()
+	if not bot:
+		return HTTPException(status_code=500, detail="Fatal: default bot not found")
+
+	if body.name:
+		bot.name = body.name
+
+	if body.prompt:
+		bot.prompt = body.prompt
+
+	if body.model_id:
+		bot.model_id = body.model_id
+
+	await save_bot(bot)
+
+	return bot
