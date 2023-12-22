@@ -12,9 +12,3 @@ class UpdateBotRequest(BaseModel):
 	prompt: Optional[str]
 	model_id: Optional[str]
 
-class GetBotsResponse(BaseModel):
-	bots: list[Bot]
-
-class NewChatResponse(BaseModel):
-	chat_id: str
-
