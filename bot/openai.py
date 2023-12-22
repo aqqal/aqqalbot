@@ -104,4 +104,3 @@ async def get_response(chat: Chat, message: str, context: str = None, timeout_se
 	content = message.content[0].text.value
 
 	return Message(created_at=message.created_at, role="bot", content=content)
-
