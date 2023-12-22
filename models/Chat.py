@@ -2,17 +2,17 @@ from pydantic import BaseModel
 from typing import Optional, List
 from models.Message import Message
 
-
 class Chat(BaseModel):
-	id: str
-	started_timestamp: int
-	last_message_timestamp: int
-	bot_version_id: str
-	messages: List[Message]
+	id: Optional[str]
+	created_at: int
+	last_message: int
+	bot_id: str
+	messages: Optional[List[Message]]
 
 
-class BotVersion(BaseModel):
-	id: str
+class Bot(BaseModel):
+	id: Optional[str]
 	name: str
-	timestamp: int
+	created_at: int
 	prompt: str
+	model_id: str
