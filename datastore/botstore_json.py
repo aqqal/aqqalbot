@@ -1,9 +1,16 @@
+from models.bot import Bot
+from typing import List
+import json
+import os
+
+JSON_FILE = os.path.dirname(os.path.realpath(__file__)) + "/bots.json"
+
 def get_default_bot() -> Bot:
 	"""
 	Returns the default bot from datastore
 	"""
 
-	with open("bots.json") as f:
+	with open(JSON_FILE) as f:
 		bots = json.load(f)
 
 	bots = [Bot(**bot) for bot in bots]
@@ -18,11 +25,11 @@ def get_bot(id: str) -> Bot | None:
 	Returns a bot from datastore by id
 	"""
 
-	with open("bots.json") as f:
+	with open(JSON_FILE) as f:
 		bots = json.load(f)
 
 	bots = [Bot(**bot) for bot in bots]
-	
+
 	for bot in bots:
 		if bot.id == id:
 			return bot
@@ -36,7 +43,7 @@ async def save_bot(new_bot: Bot):
 	"""
 
 	bots = []
-	with open("bots.json") as f:
+	with open(JSON_FILE) as f:
 		bots = json.load(f)
 
 	# replace if exists
@@ -62,7 +69,7 @@ def list_bots() -> List[Bot]:
 	Returns a list of all bots in datastore
 	"""
 
-	with open("bots.json") as f:
+	with open(JSON_FILE) as f:
 		bots = json.load(f)
 
 	bots = [Bot(**bot) for bot in bots]
