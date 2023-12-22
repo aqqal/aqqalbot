@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional
-from models.Chat import Bot
+from models.bot import Bot
 
 class NewBotRequest(BaseModel):
 	name: Optional[str]
