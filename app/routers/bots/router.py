@@ -1,9 +1,6 @@
 from fastapi import APIRouter, Depends
 from app.auth import validate_token
-
-from bot.openai import new_bot
-
-from models.Chat import Bot
+from typing import List
 
 from app.routers.bots.models import (
 	NewBotRequest,
@@ -15,6 +12,9 @@ from datastore.botstore_json import (
 	list_bots,
 	save_bot
 )
+
+from bot.openai import new_bot
+from models.bot import Bot
 
 import time
 
