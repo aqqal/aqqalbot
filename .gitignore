@@ -6,6 +6,8 @@
 *pycache__/
 *pytest_cache/
 
+/datastore/*.json
+
 *.cfg
 *.env
 *.log
