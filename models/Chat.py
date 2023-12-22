@@ -10,9 +10,16 @@ class Chat(BaseModel):
 	messages: Optional[List[Message]]
 
 
-class Bot(BaseModel):
+class Message(BaseModel):
 	id: Optional[str]
-	name: str
 	created_at: int
-	prompt: str
-	model_id: str
+	by: str
+	content: str
+	context: Optional[str]
+	token_usage: Optional[TokenUsage]
+
+
+class TokenUsage(BaseModel):
+	completion_tokens: Optional[int]
+	prompt_tokens: Optional[int]
+	tokens: int
