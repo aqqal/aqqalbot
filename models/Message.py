@@ -3,14 +3,14 @@ from typing import Optional, List
 
 
 class TokenUsage(BaseModel):
-	completion_tokens: int
-	prompt_tokens: int
-	total_tokens: int
-
+	completion_tokens: Optional[int]
+	prompt_tokens: Optional[int]
+	tokens: int
 
 class Message(BaseModel):
-	id: str
-	bot: bool
+	id: Optional[str]
+	created_at: int
+	by: str
 	content: str
 	context: Optional[str]
-	token_usage: Optional[TokenUsage] # dict of token usage for the response
+	token_usage: Optional[TokenUsage]
