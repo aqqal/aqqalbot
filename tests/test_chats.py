@@ -7,6 +7,8 @@ import os
 import pytest
 
 
+# TODO: add tests for v1
+
 load_dotenv()
 
 token = os.getenv("CLIENT_KEY")
