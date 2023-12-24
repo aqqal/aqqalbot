@@ -23,7 +23,8 @@ HEADERS = {
 
 @pytest.fixture(scope="module")
 def bot_list():
-	return []	
+	# assumes bot storage only has default bot
+	return []
 
 
 def test_get_default_bot(bot_list):
@@ -31,6 +32,7 @@ def test_get_default_bot(bot_list):
 	
 	assert response.status_code == 200
 	json = response.json()
+	print(json)
 	assert Bot(**json)
 
 	bot_list.append(Bot(**json))
@@ -65,3 +67,12 @@ def test_list_bots(bot_list):
 	assert len(json) == len(bot_list)
 	assert bot_list == [Bot(**bot_dict) for bot_dict in json]
 
+
+def test_get_bot(bot_list):
+	bot = bot_list[1]
+	response = client.get(f"/bots/{bot.id}", headers=HEADERS)
+	
+	assert response.status_code == 200
+	json = response.json()
+
+	assert Bot(**json) == bot
