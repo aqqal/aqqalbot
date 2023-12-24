@@ -71,17 +71,18 @@ async def update_default_bot(body: UpdateBotRequest):
 
 	body = body.dict()
 
+	update = body.copy()
 	for key in body:
 		if body[key] == None:
-			body.pop(key)
+			update.pop(key)
 			continue
 
 		if key == "name":
 			return HTTPException(status_code=400, detail="Cannot change name of default bot")
 		
-		setattr(bot, key, body[key])
+		setattr(bot, key, update[key])
 
-	await update_bot(bot.id, **body)
+	await update_bot(bot.id, **update)
 	bot = await save_bot(bot)
 
 	return bot
@@ -113,9 +114,10 @@ async def update_bot_by_id(id: str, body: UpdateBotRequest):
 
 	body = body.dict()
 
+	update = body.copy()
 	for key in body:
 		if body[key] == None:
-			body.pop(key)
+			update.pop(key)
 			continue
 
 		if key == "name" and bot.name == "default_bot":
@@ -123,7 +125,7 @@ async def update_bot_by_id(id: str, body: UpdateBotRequest):
 		
 		setattr(bot, key, body[key])
 
-	await update_bot(bot.id, **body)
+	await update_bot(bot.id, **update)
 	bot = await save_bot(bot)
 
 	return bot
