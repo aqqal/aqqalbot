@@ -62,7 +62,7 @@ async def save_bot(new_bot: Bot) -> Bot:
 		bots.append(new_bot.dict())
 
 	with open(JSON_FILE, "w") as f:
-		json.dump(bots, f)
+		json.dump(bots, f, indent=2)
 
 	return Bot(**new_bot.dict())
 
