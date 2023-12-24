@@ -76,3 +76,27 @@ def test_get_bot(bot_list):
 	json = response.json()
 
 	assert Bot(**json) == bot
+
+
+def test_update_bot(bot_list):
+	bot = bot_list[1]
+
+	update = UpdateBotRequest(
+		name="Test Bot 2",
+		prompt="You are a bot that teaches about Islam",
+	)
+
+	response = client.patch(f"/bots/{bot.id}", json=update.dict(), headers=HEADERS)
+
+	assert response.status_code == 200
+	json = response.json()
+
+	assert bot.id == json["id"]
+	assert json["name"] == update.name
+	assert json["prompt"] == update.prompt
+	assert json["model_id"] == bot.model_id
+	assert Bot(**json)
+
+	bot_list[1] = Bot(**json)
+
+	test_get_bot(bot_list)
