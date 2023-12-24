@@ -62,7 +62,7 @@ async def default_bot(response_model=Bot):
 @router.patch("/default", response_model=Bot)
 async def update_default_bot(body: UpdateBotRequest):
 	"""
-	Updates the default bot
+	Updates the default bot. Does not allow changing the name of default bot.
 	"""
 
 	bot = get_default_bot()
@@ -74,8 +74,12 @@ async def update_default_bot(body: UpdateBotRequest):
 	for key in body:
 		if body[key] == None:
 			body.pop(key)
-		else:
-			setattr(bot, key, body[key])
+			continue
+
+		if key == "name":
+			return HTTPException(status_code=400, detail="Cannot change name of default bot")
+		
+		setattr(bot, key, body[key])
 
 	await update_bot(bot.id, **body)
 	bot = await save_bot(bot)
@@ -99,7 +103,7 @@ async def get_bot_by_id(id: str):
 @router.patch("/{id}", response_model=Bot)
 async def update_bot_by_id(id: str, body: UpdateBotRequest):
 	"""
-	Updates a bot by id
+	Updates a bot by id. Does not allow changing the name of default bot.
 	"""
 
 	bot = get_bot(id)
@@ -112,8 +116,12 @@ async def update_bot_by_id(id: str, body: UpdateBotRequest):
 	for key in body:
 		if body[key] == None:
 			body.pop(key)
-		else:
-			setattr(bot, key, body[key])
+			continue
+
+		if key == "name" and bot.name == "default_bot":
+			return HTTPException(status_code=400, detail="Cannot change name of default bot")
+		
+		setattr(bot, key, body[key])
 
 	await update_bot(bot.id, **body)
 	bot = await save_bot(bot)
