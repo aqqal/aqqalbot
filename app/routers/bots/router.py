@@ -49,7 +49,7 @@ async def get_bots():
 @router.get("/{id}", response_model=Bot)
 async def get_bot(id: str):
 	"""
-	Updates a bot by id
+	Gets a bot by id
 	"""
 
 	bot = get_bot(id)
