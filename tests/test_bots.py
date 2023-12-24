@@ -19,11 +19,9 @@ HEADERS = {
 	'Authorization': f'Bearer {token}'
 }
 
-# Test Bot
-
 @pytest.fixture(scope="module")
 def bot_list():
-	# assumes bot storage only has default bot
+	"""assumes bot storage only has default bot"""
 	return []
 
 
