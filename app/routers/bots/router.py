@@ -36,6 +36,7 @@ async def new_bot(body: NewBotRequest):
 
 	return bot 
 
+
 @router.get("", response_model=List[Bot])
 async def get_bots():
 	"""
@@ -45,8 +46,8 @@ async def get_bots():
 	return list_bots()
 
 
-@router.patch("/{id}", response_model=Bot)
-async def update_bot(id: str, body: UpdateBotRequest):
+@router.get("/{id}", response_model=Bot)
+async def get_bot(id: str):
 	"""
 	Updates a bot by id
 	"""
@@ -55,17 +56,25 @@ async def update_bot(id: str, body: UpdateBotRequest):
 	if not bot:
 		return HTTPException(status_code=404, detail="Bot not found")
 
-	if body.name:
-		bot.name = body.name
 
-	if body.prompt:
-		bot.prompt = body.prompt
+@router.patch("/{id}", response_model=Bot)
+async def update_bot(id: str, body: UpdateBotRequest):
+	"""
+	Updates a bot by id
+	"""
 
-	if body.model_id:
-		bot.model_id = body.model_id
+	bot = get_bot(id)
+
+	if not bot:
+		return HTTPException(status_code=404, detail="Bot not found")
+
+	body = body.dict()
+
+	for key in body:
+		if body[key] != None:
+			setattr(bot, key, body[key])
 
 	await save_bot(bot)
-
 	return bot
 
 
