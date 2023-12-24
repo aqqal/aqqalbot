@@ -46,8 +46,21 @@ async def get_bots():
 	return list_bots()
 
 
+@router.get("/default")
+async def default_bot(response_model=Bot):
+	"""
+	Returns the default bot
+	"""
+
+	bot = get_default_bot()
+	if not bot:
+		return HTTPException(status_code=500, detail="Fatal: default bot not found")
+	
+	return bot
+
+
 @router.get("/{id}", response_model=Bot)
-async def get_bot(id: str):
+async def get_bot_by_id(id: str):
 	"""
 	Gets a bot by id
 	"""
@@ -55,6 +68,8 @@ async def get_bot(id: str):
 	bot = get_bot(id)
 	if not bot:
 		return HTTPException(status_code=404, detail="Bot not found")
+
+	return bot
 
 
 @router.patch("/{id}", response_model=Bot)
@@ -76,15 +91,6 @@ async def update_bot(id: str, body: UpdateBotRequest):
 
 	await save_bot(bot)
 	return bot
-
-
-@router.get("/default", response_model=Bot)
-def defualt_bot():
-	"""
-	Returns the default bot
-	"""
-
-	return get_default_bot()
 
 
 @router.patch("/default", response_model=Bot)

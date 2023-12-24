@@ -1,5 +1,5 @@
 from models.bot import Bot
-from typing import List
+from typing import List, Union
 import json
 import os
 
@@ -12,21 +12,23 @@ def get_default_bot() -> Bot:
 	Returns the default bot from datastore
 	"""
 
+	bots = []
 	with open(JSON_FILE) as f:
 		bots = json.load(f)
 
-	bots = [Bot(**bot) for bot in bots]
+	# bots = [Bot(**bot) for bot in bots]
 	if len(bots) == 0:
 		raise Exception("No bots found in datastore")
 
 	return bots[0]
 
 
-def get_bot(id: str) -> Bot | None:
+def get_bot(id: str) -> Union[Bot, None]:
 	"""
 	Returns a bot from datastore by id
 	"""
 
+	bots = []
 	with open(JSON_FILE) as f:
 		bots = json.load(f)
 
