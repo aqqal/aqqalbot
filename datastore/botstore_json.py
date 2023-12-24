@@ -3,7 +3,9 @@ from typing import List
 import json
 import os
 
+
 JSON_FILE = os.path.dirname(os.path.realpath(__file__)) + "/bots.json"
+
 
 def get_default_bot() -> Bot:
 	"""
@@ -36,7 +38,8 @@ def get_bot(id: str) -> Bot | None:
 
 	return None
 
-async def save_bot(new_bot: Bot):
+
+async def save_bot(new_bot: Bot) -> Bot:
 	"""
 	Saves a bot to datastore, replacing a bot that already exists
 	with the same name or id
@@ -48,7 +51,7 @@ async def save_bot(new_bot: Bot):
 
 	# replace if exists
 	for bot in bots:
-		if bot["id"] == bot.id or bot["name"] == bot.name:
+		if bot["id"] == new_bot.id or bot["name"] == new_bot.name:
 			bots.remove(bot)
 
 			assitant_id = bot.pop("id")
@@ -59,16 +62,18 @@ async def save_bot(new_bot: Bot):
 	else:
 		bots.append(new_bot.dict())
 
-	with open("bots.json", "w") as f:
+	with open(JSON_FILE, "w") as f:
 		json.dump(bots, f)
 
-	return new_bot
+	return Bot(**new_bot.dict())
+
 
 def list_bots() -> List[Bot]:
 	"""
 	Returns a list of all bots in datastore
 	"""
 
+	bots = []
 	with open(JSON_FILE) as f:
 		bots = json.load(f)
 
