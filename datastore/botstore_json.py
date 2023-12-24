@@ -44,7 +44,7 @@ def get_bot(id: str) -> Union[Bot, None]:
 async def save_bot(new_bot: Bot) -> Bot:
 	"""
 	Saves a bot to datastore, replacing a bot that already exists
-	with the same name or id
+	with the same id
 	"""
 
 	bots = []
@@ -53,11 +53,8 @@ async def save_bot(new_bot: Bot) -> Bot:
 
 	# replace if exists
 	for bot in bots:
-		if bot["id"] == new_bot.id or bot["name"] == new_bot.name:
+		if bot["id"] == new_bot.id:
 			bots.remove(bot)
-
-			assitant_id = bot.pop("id")
-			await client.beta.assistants.update(assistant_id, **bot.dict())
 
 	if new_bot.name == "default_bot":
 		bots.insert(0, new_bot.dict())

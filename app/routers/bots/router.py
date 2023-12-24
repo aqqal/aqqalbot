@@ -14,7 +14,7 @@ from datastore.botstore_json import (
 	get_bot
 )
 
-from bot.openai import create_new_bot
+from bot.openai import create_new_bot, update_bot
 from models.bot import Bot
 from app import logger
 
@@ -73,7 +73,7 @@ async def get_bot_by_id(id: str):
 
 
 @router.patch("/{id}", response_model=Bot)
-async def update_bot(id: str, body: UpdateBotRequest):
+async def update_bot_by_id(id: str, body: UpdateBotRequest):
 	"""
 	Updates a bot by id
 	"""
@@ -89,7 +89,9 @@ async def update_bot(id: str, body: UpdateBotRequest):
 		if body[key] != None:
 			setattr(bot, key, body[key])
 
+	await update_bot(bot)
 	await save_bot(bot)
+
 	return bot
 
 
@@ -108,6 +110,9 @@ async def update_default_bot(body: UpdateBotRequest):
 	for key in body:
 		if body[key] != None:
 			setattr(bot, key, body[key])
+
+	await update_bot(bot)
+	await save_bot(bot)
 
 	await save_bot(bot)
 	return bot

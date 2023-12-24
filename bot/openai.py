@@ -20,6 +20,17 @@ async def create_new_bot(model_id: str, prompt: str, name=None) -> Bot:
 	return Bot(id=assistant.id, name=assistant.name, created_at=assistant.created_at, prompt=prompt, model_id=model_id)
 
 
+async def update_bot(bot: Bot) -> Bot:
+	"""
+	Updates an OpenAI assistant with the given bot object
+	Returns the updated Bot object
+	"""
+	
+	id = bot.pop("id")
+	assistant = await client.beta.assistants.update(id, **bot.dict())
+	return Bot(id=assistant.id, name=assistant.name, created_at=assistant.created_at, prompt=assistant.instructions, model_id=assistant.model)
+
+
 async def new_chat(bot_id: str) -> Chat:
 	"""
 	Returns a new Chat object by creating a new OpenAI thread
