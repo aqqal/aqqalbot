@@ -59,6 +59,30 @@ async def default_bot(response_model=Bot):
 	return bot
 
 
+@router.patch("/default", response_model=Bot)
+async def update_default_bot(body: UpdateBotRequest):
+	"""
+	Updates the default bot
+	"""
+
+	bot = get_default_bot()
+	if not bot:
+		return HTTPException(status_code=500, detail="Fatal: default bot not found")
+
+	body = body.dict()
+
+	for key in body:
+		if body[key] == None:
+			body.pop(key)
+		else:
+			setattr(bot, key, body[key])
+
+	await update_bot(bot.id, **body)
+	bot = await save_bot(bot)
+
+	return bot
+
+
 @router.get("/{id}", response_model=Bot)
 async def get_bot_by_id(id: str):
 	"""
@@ -86,33 +110,12 @@ async def update_bot_by_id(id: str, body: UpdateBotRequest):
 	body = body.dict()
 
 	for key in body:
-		if body[key] != None:
+		if body[key] == None:
+			body.pop(key)
+		else:
 			setattr(bot, key, body[key])
 
-	await update_bot(bot)
-	await save_bot(bot)
+	await update_bot(bot.id, **body)
+	bot = await save_bot(bot)
 
-	return bot
-
-
-@router.patch("/default", response_model=Bot)
-async def update_default_bot(body: UpdateBotRequest):
-	"""
-	Updates the default bot
-	"""
-
-	bot = get_default_bot()
-	if not bot:
-		return HTTPException(status_code=500, detail="Fatal: default bot not found")
-
-	body = body.dict()
-
-	for key in body:
-		if body[key] != None:
-			setattr(bot, key, body[key])
-
-	await update_bot(bot)
-	await save_bot(bot)
-
-	await save_bot(bot)
 	return bot

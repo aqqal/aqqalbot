@@ -16,7 +16,7 @@ def get_default_bot() -> Bot:
 	with open(JSON_FILE) as f:
 		bots = json.load(f)
 
-	# bots = [Bot(**bot) for bot in bots]
+	bots = [Bot(**bot) for bot in bots]
 	if len(bots) == 0:
 		raise Exception("No bots found in datastore")
 

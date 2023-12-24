@@ -20,14 +20,21 @@ async def create_new_bot(model_id: str, prompt: str, name=None) -> Bot:
 	return Bot(id=assistant.id, name=assistant.name, created_at=assistant.created_at, prompt=prompt, model_id=model_id)
 
 
-async def update_bot(bot: Bot) -> Bot:
+async def update_bot(id, *args, **kwargs) -> Bot:
 	"""
 	Updates an OpenAI assistant with the given bot object
 	Returns the updated Bot object
 	"""
+
+	if "prompt" in kwargs:
+		kwargs["instructions"] = kwargs["prompt"]
+		del kwargs["prompt"]
 	
-	id = bot.pop("id")
-	assistant = await client.beta.assistants.update(id, **bot.dict())
+	if "model_id" in kwargs:
+		kwargs["model"] = kwargs["model_id"]
+		del kwargs["model_id"]
+
+	assistant = await client.beta.assistants.update(id, **kwargs)
 	return Bot(id=assistant.id, name=assistant.name, created_at=assistant.created_at, prompt=assistant.instructions, model_id=assistant.model)
 
 
