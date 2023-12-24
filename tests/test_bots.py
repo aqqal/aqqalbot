@@ -14,7 +14,7 @@ load_dotenv()
 client = TestClient(app)
 
 token = os.getenv("CLIENT_KEY")
-print(token)
+
 HEADERS = {
 	'Authorization': f'Bearer {token}'
 }
@@ -49,6 +49,7 @@ def test_create_bot(bot_list):
 	
 	assert response.status_code == 200
 	assert Bot(**json)
+	
 	bot = Bot(**json)
 	assert bot.id != None
 	
@@ -59,8 +60,6 @@ def test_list_bots(bot_list):
 	response = client.get("/bots", headers=HEADERS)
 	assert response.status_code == 200
 	json = response.json()
-	print(bot_list)
-	print(json)
 
 	assert isinstance(json, list)
 	assert len(json) == len(bot_list)
