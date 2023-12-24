@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from app.auth import validate_token
 from typing import List
 
@@ -10,11 +10,13 @@ from app.routers.bots.models import (
 from datastore.botstore_json import (
 	get_default_bot,
 	list_bots,
-	save_bot
+	save_bot,
+	get_bot
 )
 
 from bot.openai import create_new_bot
 from models.bot import Bot
+from app import logger
 
 import time
 
@@ -29,7 +31,7 @@ async def new_bot(body: NewBotRequest):
 	Creates a new bot
 	"""
 	
-	bot = await new_bot(body.model_id, body.prompt, body.name)
+	bot = await create_new_bot(body.model_id, body.prompt, body.name)
 	await save_bot(bot)
 
 	return bot 
@@ -40,7 +42,7 @@ async def get_bots():
 	Returns a list of all bots
 	"""
 
-	return list_bots()	
+	return list_bots()
 
 
 @router.patch("/{id}", response_model=Bot)
@@ -68,7 +70,7 @@ async def update_bot(id: str, body: UpdateBotRequest):
 
 
 @router.get("/default", response_model=Bot)
-def get_default_bot():
+def defualt_bot():
 	"""
 	Returns the default bot
 	"""
@@ -86,15 +88,11 @@ async def update_default_bot(body: UpdateBotRequest):
 	if not bot:
 		return HTTPException(status_code=500, detail="Fatal: default bot not found")
 
-	if body.name:
-		bot.name = body.name
+	body = body.dict()
 
-	if body.prompt:
-		bot.prompt = body.prompt
-
-	if body.model_id:
-		bot.model_id = body.model_id
+	for key in body:
+		if body[key] != None:
+			setattr(bot, key, body[key])
 
 	await save_bot(bot)
-
 	return bot
