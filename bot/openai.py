@@ -38,7 +38,7 @@ async def update_bot(id, *args, **kwargs) -> Bot:
 	return Bot(id=assistant.id, name=assistant.name, created_at=assistant.created_at, prompt=assistant.instructions, model_id=assistant.model)
 
 
-async def new_chat(bot_id: str) -> Chat:
+async def create_new_chat(bot_id: str) -> Chat:
 	"""
 	Returns a new Chat object by creating a new OpenAI thread
 	"""
