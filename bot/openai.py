@@ -74,7 +74,14 @@ async def add_message(chat: Chat, message: str, context: str = None) -> Message:
 	"""
 
 	message = await client.beta.threads.messages.create(chat.id, content=message)
-	return Message(created_at=message.created_at, by="user", content=message.content)
+	
+	return Message(
+		id=message.id,
+		created_at=message.created_at,
+		role="user",
+		content=content,
+		chat_id=chat.id
+	)
 
 
 async def get_response(chat: Chat, message: str, context: str = None, timeout_seconds=60) -> Message:
@@ -121,4 +128,10 @@ async def get_response(chat: Chat, message: str, context: str = None, timeout_se
 	message = await client.beta.threads.messages.retrieve(message_id)
 	content = message.content[0].text.value
 
-	return Message(created_at=message.created_at, role="bot", content=content)
+	return Message(
+		id=message.id,
+		created_at=message.created_at,
+		role="bot",
+		content=content,
+		chat_id=chat.id
+	)
