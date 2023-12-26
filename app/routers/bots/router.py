@@ -18,8 +18,6 @@ from bot.openai import create_new_bot, update_bot
 from models.bot import Bot
 from app import logger
 
-import time
-
 router = APIRouter(
     prefix="/bots",
     dependencies=[Depends(validate_token)]
