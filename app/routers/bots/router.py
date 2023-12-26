@@ -46,8 +46,8 @@ async def get_bots():
 	return list_bots()
 
 
-@router.get("/default")
-async def default_bot(response_model=Bot):
+@router.get("/default", response_model=Bot)
+async def default_bot():
 	"""
 	Returns the default bot
 	"""
