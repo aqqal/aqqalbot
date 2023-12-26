@@ -26,8 +26,7 @@ def chat_info():
 		"default_bot_id": "",
 		"test_bot_id": "None",
 		"chat_id": None,
-		"message_id": None,
-		"message_content": None
+		"message_content": "Help me understand what is the meaning of faith",
 	}
 
 
@@ -102,6 +101,3 @@ def test_new_message(chat_info):
 	assert message.id is not None
 	assert message.chat_id == chat_info["chat_id"]
 	assert message.by == "bot"
-
-	chat_info["message_id"] = message.id
-	chat_info["message_content"] = message.content
