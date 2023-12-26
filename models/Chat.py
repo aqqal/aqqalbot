@@ -10,6 +10,7 @@ class TokenUsage(BaseModel):
 
 class Message(BaseModel):
 	id: Optional[str]
+	chat_id: str
 	created_at: int
 	by: str
 	content: str
@@ -23,3 +24,4 @@ class Chat(BaseModel):
 	last_message: int
 	bot_id: str
 	messages: Optional[List[Message]]
+
