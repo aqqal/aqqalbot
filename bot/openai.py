@@ -67,13 +67,13 @@ async def create_run(chat: Chat) -> str:
 	return run.id
 
 
-async def add_message(chat: Chat, message: str, context: str = None) -> Message:
+async def add_message(chat: Chat, content: str, context: str = None) -> Message:
 	"""
 	Adds a message to an OpenAI thread
 	Returns the response from OpenAI
 	"""
 
-	message = await client.beta.threads.messages.create(chat.id, content=message)
+	message = await client.beta.threads.messages.create(chat.id, role="user", content=content)
 	
 	return Message(
 		id=message.id,
