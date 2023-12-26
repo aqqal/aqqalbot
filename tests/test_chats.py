@@ -51,6 +51,27 @@ def test_new_chat_default_bot(chat_info):
 	assert chat.created_at == chat.last_message
 	assert chat.bot_id == chat_info["default_bot_id"]
 
+	chat_info["chat_id"] = chat.id
+
+
+def test_get_chat(chat_info):
+	"""
+	Tests the endpoint GET /chats/{chat_id}
+	"""
+
+	response = client.get(
+		f"/chats/{chat_info['chat_id']}",
+		headers=HEADERS
+	)
+
+	assert response.status_code == 200
+	json = response.json()
+	assert Chat(**json)
+	chat = Chat(**json)
+
+	assert chat.id == chat_info["chat_id"]
+
+	
 
 def test_new_chat_custom_bot(chat_info):
 	"""
