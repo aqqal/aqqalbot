@@ -25,7 +25,7 @@ def get_chat(id: str) -> Union[Chat, None]:
 	return None
 
 
-async def save_chat(new_chat: chat) -> chat:
+def save_chat(new_chat: Chat) -> Chat:
 	"""
 	Saves a chat to datastore, replacing a chat that already exists
 	with the same id
@@ -45,10 +45,10 @@ async def save_chat(new_chat: chat) -> chat:
 	with open(JSON_FILE, "w") as f:
 		json.dump(chats, f, indent=2)
 
-	return chat(**new_chat.dict())
+	return Chat(**new_chat.dict())
 
 
-def list_chats() -> List[chat]:
+def list_chats() -> List[Chat]:
 	"""
 	Returns a list of all chats in datastore
 	"""
