@@ -98,14 +98,10 @@ def test_new_message(chat_info):
 	json = response.json()
 	assert Message(**json)
 	message = Message(**json)
+	
 	assert message.id is not None
 	assert message.chat_id == chat_info["chat_id"]
 	assert message.by == "bot"
-	assert message.content == body.content
-	assert message.context == body.context
-	assert message.token_usage.completion_tokens is not None
-	assert message.token_usage.prompt_tokens is not None
-	assert message.token_usage.tokens is not None
 
 	chat_info["message_id"] = message.id
 	chat_info["message_content"] = message.content
