@@ -23,5 +23,4 @@ class Chat(BaseModel):
 	created_at: int
 	last_message: int
 	bot_id: str
-	messages: Optional[List[Message]]
 
