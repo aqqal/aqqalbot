@@ -28,8 +28,22 @@ async def new_chat(body: NewChatRequest):
 	"""
 	bot_id = body.bot_id if body.bot_id else get_default_bot().id
 
-	chat = await create_new_chat()
-	save_chat(chat)
+	chat = await create_new_chat(bot_id)
+	
+	return save_chat(chat)
+
+
+
+@router.get("/{chat_id}", response_model=Chat)
+async def get_chat_from_datastore(chat_id: str):
+	"""
+	Returns a chat from datastore by id
+	"""
+
+	chat = get_chat(chat_id)
+	if not chat:
+		raise HTTPException(status_code=404, detail="Chat not found")
+
 	return chat
 
 
@@ -40,9 +54,14 @@ async def new_message(chat_id: str, body: NewMessageRequest):
 	"""
 
 	# get chat from datastore
-	chat = await get_chat(chat_id)
+	chat = get_chat(chat_id)
 	if not chat:
 		raise HTTPException(status_code=404, detail="Chat not found")
 
+	if not body.content:
+		raise HTTPException(status_code=400, detail="Message content required")
+
 	message = await add_message(chat, body.content)
-	return message
+	response = await get_response(chat, message.content)
+
+	return response
