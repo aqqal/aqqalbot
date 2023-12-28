@@ -14,8 +14,7 @@ class Message(BaseModel):
 	created_at: int
 	by: str
 	content: str
-	context: Optional[str]
-	token_usage: Optional[TokenUsage]
+	token_usage: Optional[TokenUsage] = None
 	
 
 class Chat(BaseModel):
@@ -23,4 +22,4 @@ class Chat(BaseModel):
 	created_at: int
 	last_message: int
 	bot_id: str
-
+	messages: Opitonal[List[Message]]
