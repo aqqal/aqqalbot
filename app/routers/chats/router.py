@@ -6,7 +6,7 @@ from app.routers.chats.models import (
 	NewMessageRequest
 )
 
-from bot.openai import create_new_chat, add_message, get_response
+from bot.openai_assistants import create_new_chat, add_message, get_response
 from models.chat import Chat, Message
 
 from datastore.botstore_json import get_default_bot

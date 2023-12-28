@@ -14,7 +14,7 @@ from datastore.botstore_json import (
 	get_bot
 )
 
-from bot.openai import create_new_bot, update_bot
+from bot.openai_assistants import create_new_bot, update_bot
 from models.bot import Bot
 from app import logger
 

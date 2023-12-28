@@ -3,7 +3,6 @@ from models.bot import Bot
 
 from bot.config import client
 from bot.logger import logger
-
 import time
 
 async def create_new_bot(model_id: str, prompt: str, name=None) -> Bot:
@@ -99,13 +98,13 @@ async def get_response(chat: Chat, message: str, context: str = None, timeout_se
 	c = timeout_seconds
 	
 	while True:
+		if status == "completed":
+			break
+
 		time.sleep(1)
 		c -= 1
 		if c == 0:
 			raise TimeoutError("Timeout while waiting for Run to complete")
-
-		if status == "completed":
-			break
 
 		if status not in valid_statuses:
 			raise Exception("Unexpected Run status returned from OpenAI: " + status)
