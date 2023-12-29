@@ -23,10 +23,13 @@ def get_default_bot() -> Bot:
 	return bots[0]
 
 
-def get_bot(id: str) -> Union[Bot, None]:
+def get_bot(id: Optional[str] = None, name: Optional[str] = None) -> Union[Bot, None]:
 	"""
-	Returns a bot from datastore by id
+	Returns a bot from datastore by id or name
 	"""
+
+	if not id and not name:
+		raise Exception("Must provide either id or name")
 
 	bots = []
 	with open(JSON_FILE) as f:
@@ -35,7 +38,7 @@ def get_bot(id: str) -> Union[Bot, None]:
 	bots = [Bot(**bot) for bot in bots]
 
 	for bot in bots:
-		if bot.id == id:
+		if bot.id == id or bot.name == name:
 			return bot
 
 	return None
