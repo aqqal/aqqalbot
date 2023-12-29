@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from app.auth import validate_token
 from typing import List
+from uuid import uuid4
+import time
 
 from app.routers.bots.models import (
 	NewBotRequest,
@@ -14,9 +16,9 @@ from datastore.botstore_json import (
 	get_bot
 )
 
-from bot.openai_assistants import create_new_bot, update_bot
+# from bot.openai_assistants import create_new_bot, update_bot
 from models.bot import Bot
-from app import logger
+from app.logger import logger
 
 router = APIRouter(
     prefix="/bots",
@@ -28,11 +30,21 @@ async def new_bot(body: NewBotRequest):
 	"""
 	Creates a new bot
 	"""
-	
-	bot = await create_new_bot(body.model_id, body.prompt, body.name)
-	await save_bot(bot)
+	# bot = await create_new_bot(body.model_id, body.prompt, body.name)
+	if get_bot(name=body.name):
+		raise HTTPException(status_code=400, detail="Bot with that name already exists, use a different name")
 
-	return bot 
+	bot = Bot(
+		id=str(uuid4()),
+		name=body.name,
+		prompt=body.prompt,
+		model_id=body.model_id,
+		created_at=int(time.time())
+	)
+
+	bot = save_bot(bot)
+	logger.info(f"Saved new bot: {bot}")
+	return bot
 
 
 @router.get("", response_model=List[Bot])
@@ -80,8 +92,7 @@ async def update_default_bot(body: UpdateBotRequest):
 		
 		setattr(bot, key, update[key])
 
-	await update_bot(bot.id, **update)
-	bot = await save_bot(bot)
+	bot = save_bot(bot)
 
 	return bot
 
@@ -123,7 +134,6 @@ async def update_bot_by_id(id: str, body: UpdateBotRequest):
 		
 		setattr(bot, key, body[key])
 
-	await update_bot(bot.id, **update)
-	bot = await save_bot(bot)
+	bot = save_bot(bot)
 
 	return bot
