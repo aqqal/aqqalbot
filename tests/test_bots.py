@@ -40,6 +40,7 @@ def test_create_default_bot(bot_list):
 
 	bot = Bot(**json)
 	assert bot.id != None
+	bot_list.append(bot)
 
 
 def test_get_default_bot(bot_list):
@@ -47,10 +48,7 @@ def test_get_default_bot(bot_list):
 	
 	assert response.status_code == 200
 	json = response.json()
-	print(json)
 	assert Bot(**json)
-
-	bot_list.append(Bot(**json))
 	assert json["name"] == "default_bot"
 
 
@@ -106,7 +104,7 @@ def test_update_bot(bot_list):
 	assert response.status_code == 200
 	json = response.json()
 
-	assert bot.id == json["id"]
+	assert bot.id == json["_id"]
 	assert json["name"] == update.name
 	assert json["prompt"] == update.prompt
 	assert json["model_id"] == bot.model_id
