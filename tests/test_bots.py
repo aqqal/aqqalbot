@@ -21,8 +21,25 @@ HEADERS = {
 
 @pytest.fixture(scope="module")
 def bot_list():
-	"""assumes bot storage only has default bot"""
 	return []
+
+
+def test_create_default_bot(bot_list):
+	bot = NewBotRequest(
+		name="default_bot",
+		prompt="You are a bot that teaches about Islam",
+		model_id="gpt-3.5-turbo-1106"
+	)
+
+	response = client.post("/bots", json=bot.dict(), headers=HEADERS)
+
+	json = response.json()
+
+	assert response.status_code == 200
+	assert Bot(**json)
+
+	bot = Bot(**json)
+	assert bot.id != None
 
 
 def test_get_default_bot(bot_list):
