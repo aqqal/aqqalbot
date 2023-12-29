@@ -1,5 +1,5 @@
 from models.bot import Bot
-from typing import List, Union
+from typing import List, Union, Optional
 import json
 import os
 
@@ -44,7 +44,7 @@ def get_bot(id: Optional[str] = None, name: Optional[str] = None) -> Union[Bot, 
 	return None
 
 
-async def save_bot(new_bot: Bot) -> Bot:
+def save_bot(new_bot: Bot) -> Bot:
 	"""
 	Saves a bot to datastore, replacing a bot that already exists
 	with the same id
