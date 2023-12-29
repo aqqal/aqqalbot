@@ -9,6 +9,12 @@ from bot.tools import get_available_tools, call_tools_on_chat
 import time
 
 async def add_init_model_context_to_chat(chat: Chat) -> Chat:
+	"""
+	Adds initial model context array item to chat object by reading bot object in the chat.
+	
+	"""
+
+
 	if chat.model_context:
 		raise Exception("Model context already exists")
 
@@ -25,7 +31,7 @@ async def add_init_model_context_to_chat(chat: Chat) -> Chat:
 
 async def add_bot_response_to_Chat(chat: Chat, use_tools=False) -> Chat:
 	"""
-	Uses bot in chat object to create response using OpenAI.
+	Uses bot in chat object to append a response Message using OpenAI.
 	"""
 
 	tools = get_available_tools() if use_tools else None
