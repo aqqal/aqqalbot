@@ -30,7 +30,7 @@ async def add_init_model_context_to_chat(chat: Chat) -> Chat:
 	return chat
 	
 
-async def add_user_message_to_Chat(chat: Chat, content: str) -> Chat:
+async def add_user_message_to_chat(chat: Chat, content: str) -> Chat:
 	"""
 	Appends a user Message to chat object.
 	"""
@@ -38,12 +38,11 @@ async def add_user_message_to_Chat(chat: Chat, content: str) -> Chat:
 	message = Message(
 		content=content,
 		by="user",
-		created_at=int(time.time()),
 	)
 
 	chat.last_message = message.created_at
 
-	if chat.messages is None or chat.model_context is None:
+	if not chat.messages or not chat.model_context:
 		raise Exception("Chat object not initialized")
 
 	chat.messages.append(message)
@@ -54,7 +53,7 @@ async def add_user_message_to_Chat(chat: Chat, content: str) -> Chat:
 
 	return chat
 
-async def add_bot_response_to_Chat(chat: Chat, use_tools=False) -> Chat:
+async def add_bot_response_to_chat(chat: Chat, use_tools=False) -> Chat:
 	"""
 	Uses bot in chat object to append a response Message using OpenAI.
 	"""
