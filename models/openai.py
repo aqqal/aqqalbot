@@ -15,7 +15,4 @@ class OpenAIMessage(BaseModel):
 
 
 class OpenAIContext(BaseModel):
-	class Config:
-		arbitrary_types_allowed = True
-
-	messages = List[OpenAIMessage]
+	messages: List[OpenAIMessage]
