@@ -64,7 +64,7 @@ async def default_bot():
 
 	bot = get_default_bot()
 	if not bot:
-		return HTTPException(status_code=500, detail="Fatal: default bot not found")
+		raise HTTPException(status_code=500, detail="Fatal: default bot not found")
 	
 	return bot
 
@@ -77,7 +77,7 @@ async def update_default_bot(body: UpdateBotRequest):
 
 	bot = get_default_bot()
 	if not bot:
-		return HTTPException(status_code=500, detail="Fatal: default bot not found")
+		raise HTTPException(status_code=500, detail="Fatal: default bot not found")
 
 	body = body.dict()
 
@@ -88,7 +88,7 @@ async def update_default_bot(body: UpdateBotRequest):
 			continue
 
 		if key == "name":
-			return HTTPException(status_code=400, detail="Cannot change name of default bot")
+			raise HTTPException(status_code=400, detail="Cannot change name of default bot")
 		
 		setattr(bot, key, update[key])
 
