@@ -6,7 +6,7 @@ from .logger import logger
 load_dotenv()
 
 MONGO_URL = os.getenv("MONGO_URL")
-CHAT_DB_NAME = os.getenv("CHAT_DB_NAME")
+CHAT_DB_NAME = "chatDB"
 
 def get_client():
 	try:
@@ -17,3 +17,4 @@ def get_client():
 	return client
 
 client = get_client()
+chat_db = client.get_database(CHAT_DB_NAME)
