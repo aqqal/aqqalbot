@@ -1,3 +1,4 @@
+from pydantic import BaseModel
 from typing import List, Optional, Literal
 from openai.types.chat.chat_completion_message_tool_call import ChatCompletionMessageToolCall
 
@@ -14,4 +15,7 @@ class OpenAIMessage(BaseModel):
 
 
 class OpenAIContext(BaseModel):
+	class Config:
+		arbitrary_types_allowed = True
+
 	messages = List[OpenAIMessage]
