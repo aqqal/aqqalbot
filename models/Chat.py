@@ -25,5 +25,5 @@ class Chat(BaseModel):
 	created_at: int
 	last_message: int
 	messages: List[Message]
-	model_context: Union[OpenAIContext, None]
+	model_context: Optional[OpenAIContext] = []
 
