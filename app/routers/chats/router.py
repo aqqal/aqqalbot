@@ -44,6 +44,7 @@ async def new_chat(body: NewChatRequest):
 			raise HTTPException(status_code=500, detail="Fatal: default bot not found")
 
 
+	# try retrieving by id, then by name
 	bot = bots_collection.find_one({"_id": body.bot_id}) if (not bot) and body.bot_id else bot
 	bot = bots_collection.find_one({"name": body.bot_name}) if (not bot) and body.bot_name else bot
 
