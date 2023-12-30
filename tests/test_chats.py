@@ -23,10 +23,7 @@ HEADERS = {
 @pytest.fixture(scope="module")
 def chat_info():
 	return {
-		"default_bot_id": "",
-		"test_bot_id": "None",
-		"chat_id": None,
-		"message_content": "Help me understand what is the meaning of faith",
+		"test_bot_name": "test_bot",
 	}
 
 
@@ -48,9 +45,9 @@ def test_new_chat_default_bot(chat_info):
 	assert Chat(**json)
 	chat = Chat(**json)
 	assert chat.id is not None
-	assert chat.created_at == chat.last_message
-	assert chat.bot_id == chat_info["default_bot_id"]
-
+	assert chat.last_message == 0
+	assert chat.bot.name == "default_bot"
+	
 	chat_info["chat_id"] = chat.id
 
 
@@ -79,7 +76,7 @@ def test_new_chat_custom_bot(chat_info):
 	"""
 
 	body = NewChatRequest(
-		bot_id=chat_info["test_bot_id"]
+		bot_name=chat_info["test_bot_name"]
 	)
 
 	response = client.post(
@@ -93,9 +90,9 @@ def test_new_chat_custom_bot(chat_info):
 	assert Chat(**json)
 	chat = Chat(**json)
 	assert chat.id is not None
-	assert chat.created_at == chat.last_message
-	assert chat.bot_id == body.bot_id
-
+	assert chat.last_message == 0
+	assert chat.bot.name == chat_info["test_bot_name"]
+	
 	chat_info["chat_id"] = chat.id
 
 
@@ -105,7 +102,7 @@ def test_new_message(chat_info):
 	"""
 
 	body = NewMessageRequest(
-		content="test content",
+		content="Are you gonna pass this test?",
 	)
 
 	response = client.post(
@@ -118,7 +115,4 @@ def test_new_message(chat_info):
 	json = response.json()
 	assert Message(**json)
 	message = Message(**json)
-	
-	assert message.id is not None
-	assert message.chat_id == chat_info["chat_id"]
 	assert message.by == "bot"

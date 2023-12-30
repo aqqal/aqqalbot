@@ -54,8 +54,8 @@ def test_get_default_bot(bot_list):
 
 def test_create_bot(bot_list):
 	bot = NewBotRequest(
-		name="Test Bot",
-		prompt="You are a bot that teaches about Islam",
+		name="test_bot",
+		prompt="You are a bot that teaches peopole about beautiful Islam",
 		model_id=bot_list[0].model_id
 	)
 	response = client.post("/bots", json=bot.dict(), headers=HEADERS)
@@ -95,7 +95,7 @@ def test_update_bot(bot_list):
 	bot = bot_list[1]
 
 	update = UpdateBotRequest(
-		name="Test Bot 2",
+		name="test_bot",
 		prompt="You are a bot that teaches about Islam",
 	)
 
