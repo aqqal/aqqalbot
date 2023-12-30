@@ -103,7 +103,7 @@ async def new_message(chat_id: str, body: NewMessageRequest):
 
 	chat = Chat(**chat)
 	chat = await add_user_message_to_chat(chat, body.content)
-	chat, new_message = await add_bot_response_to_chat(chat)
+	chat, message = await add_bot_response_to_chat(chat)
 
 	chats_collection.find_one_and_update({"_id": chat_id}, {"$set": jsonable_encoder(chat)})
 	chat = chats_collection.find_one({"_id": chat_id})
@@ -113,4 +113,4 @@ async def new_message(chat_id: str, body: NewMessageRequest):
 	
 	logger.info(f"New message added to chat {chat_id}")
 
-	return jsonable_encoder(new_message)
+	return jsonable_encoder(message)
