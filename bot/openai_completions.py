@@ -11,8 +11,9 @@ import time
 
 async def add_init_model_context_to_chat(chat: Chat) -> Chat:
 	"""
-	Adds initial model context array item to chat object by reading bot object in the chat.
-	
+	Reads bot object in chat and initializes model context
+	array in chat's model_context field.
+
 	"""
 
 	if chat.model_context:
@@ -60,10 +61,12 @@ async def add_bot_response_to_chat(chat: Chat, use_tools=False) -> Chat:
 	"""
 
 	logger.info(f"Calling OpenAI")
+	
 	openai_response = await client.chat.completions.create(
 		messages=chat.model_context.messages,
 		model=chat.bot.model_id,
 	)
+	
 	logger.info(f"Received OpenAI response: {openai_response}")
 	
 	openai_message = openai_response.choices[0].message
