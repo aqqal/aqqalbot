@@ -2,8 +2,12 @@ from models.chat import Chat, Message
 from models.bot import Bot
 
 from bot.config import client
-from bot.logger import logger
+
 import time
+import colorlog
+
+logger = colorlog.getLogger('main-logger')
+
 
 async def create_new_bot(model_id: str, prompt: str, name=None) -> Bot:
 	"""

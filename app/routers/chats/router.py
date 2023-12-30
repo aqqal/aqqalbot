@@ -18,8 +18,10 @@ from bot.openai_completions import (
 	add_user_message_to_chat
 )
 
-from app.logger import logger
 import time
+import colorlog
+
+logger = colorlog.getLogger('main-logger')
 
 chats_collection = chat_db.get_collection("chats")
 bots_collection = chat_db.get_collection("bots")

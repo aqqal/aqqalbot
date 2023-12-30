@@ -4,7 +4,6 @@ from models.bot import Bot
 
 from app.routers.bots.models import NewBotRequest, UpdateBotRequest
 
-from tests.logger import logger as test_logger
 from dotenv import load_dotenv
 import os
 import pytest

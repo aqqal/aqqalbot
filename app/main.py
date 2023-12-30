@@ -1,8 +1,10 @@
 from fastapi import FastAPI
+
 from app.auth import validate_token
 from app.routers.chats.router import router as chats_router
 from app.routers.bots.router import router as bots_router
 
+from app.logger import logger
 from dotenv import load_dotenv
 
 load_dotenv()

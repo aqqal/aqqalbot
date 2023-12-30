@@ -5,9 +5,11 @@ from models.openai_context import OpenAIContext
 
 from bot.config import client
 from bot.tools import get_available_tools, call_tools_on_chat
-from bot.logger import logger
 
 import time
+import colorlog
+
+logger = colorlog.getLogger('main-logger')
 
 async def add_init_model_context_to_chat(chat: Chat) -> Chat:
 	"""
@@ -90,7 +92,6 @@ async def add_bot_response_to_chat(chat: Chat, use_tools=False) -> Chat:
 		chat.messages.append(message)
 
 		return chat, message
-
 
 	chat = await call_tools_on_chat(chat, tool_calls)
 	return add_bot_response_to_Chat(chat, use_tools=use_tools)

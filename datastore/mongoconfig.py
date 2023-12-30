@@ -1,8 +1,9 @@
 import pymongo
 from dotenv import load_dotenv
 import os
-from .logger import logger
+import colorlog
 
+logger = colorlog.getLogger('main-logger')
 load_dotenv()
 
 MONGO_URL = os.getenv("MONGO_URL")

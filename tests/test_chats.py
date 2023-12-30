@@ -4,7 +4,6 @@ from models.chat import Chat, Message
 
 from app.routers.chats.models import NewChatRequest, NewMessageRequest
 
-from tests.logger import logger as test_logger
 from dotenv import load_dotenv
 import os
 import pytest
