@@ -6,44 +6,24 @@
 		"version": "0.1.0"
 	},
 	"paths": {
-		"/chats": {
+		"/chats/": {
 			"post": {
+				"tags": [
+					"chats"
+				],
 				"summary": "New Chat",
-				"operationId": "new_chat_chats_post",
-				"responses": {
-					"200": {
-						"description": "Successful Response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/NewChatResponse"
-								}
+				"description": "Creates a new chat with the given bot_id",
+				"operationId": "new_chat_chats__post",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/NewChatRequest"
 							}
 						}
-					}
+					},
+					"required": true
 				},
-				"security": [
-					{
-						"OAuth2PasswordBearer": []
-					}
-				]
-			}
-		},
-		"/chats/{id}": {
-			"get": {
-				"summary": "Get Chat",
-				"operationId": "get_chat_chats__id__get",
-				"parameters": [
-					{
-						"required": true,
-						"schema": {
-							"title": "Id",
-							"type": "string"
-						},
-						"name": "id",
-						"in": "path"
-					}
-				],
 				"responses": {
 					"200": {
 						"description": "Successful Response",
@@ -69,18 +49,72 @@
 						"OAuth2PasswordBearer": []
 					}
 				]
-			},
-			"post": {
-				"summary": "Add Message",
-				"operationId": "add_message_chats__id__post",
+			}
+		},
+		"/chats/{chat_id}": {
+			"get": {
+				"tags": [
+					"chats"
+				],
+				"summary": "Get Chat From Datastore",
+				"description": "Returns a chat from datastore by id",
+				"operationId": "get_chat_from_datastore_chats__chat_id__get",
 				"parameters": [
 					{
 						"required": true,
 						"schema": {
-							"title": "Id",
+							"title": "Chat Id",
 							"type": "string"
 						},
-						"name": "id",
+						"name": "chat_id",
+						"in": "path"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Chat"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"OAuth2PasswordBearer": []
+					}
+				]
+			}
+		},
+		"/chats/{chat_id}/messages": {
+			"post": {
+				"tags": [
+					"chats"
+				],
+				"summary": "New Message",
+				"description": "Returns a response from the bot for the message added to the chat",
+				"operationId": "new_message_chats__chat_id__messages_post",
+				"parameters": [
+					{
+						"required": true,
+						"schema": {
+							"title": "Chat Id",
+							"type": "string"
+						},
+						"name": "chat_id",
 						"in": "path"
 					}
 				],
@@ -99,8 +133,240 @@
 						"description": "Successful Response",
 						"content": {
 							"application/json": {
+								"schema": {}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/NewMessageResponse"
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"OAuth2PasswordBearer": []
+					}
+				]
+			}
+		},
+		"/bots": {
+			"get": {
+				"summary": "Get Bots",
+				"description": "Returns a list of all bots",
+				"operationId": "get_bots_bots_get",
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"title": "Response Get Bots Bots Get",
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/Bot"
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"OAuth2PasswordBearer": []
+					}
+				]
+			},
+			"post": {
+				"summary": "New Bot",
+				"description": "Creates a new bot",
+				"operationId": "new_bot_bots_post",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/NewBotRequest"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Bot"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"OAuth2PasswordBearer": []
+					}
+				]
+			}
+		},
+		"/bots/default": {
+			"get": {
+				"summary": "Default Bot",
+				"description": "Returns the default bot",
+				"operationId": "default_bot_bots_default_get",
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Bot"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"OAuth2PasswordBearer": []
+					}
+				]
+			},
+			"patch": {
+				"summary": "Update Default Bot",
+				"description": "Updates the default bot. Does not allow changing the name of default bot.",
+				"operationId": "update_default_bot_bots_default_patch",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateBotRequest"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Bot"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"OAuth2PasswordBearer": []
+					}
+				]
+			}
+		},
+		"/bots/{id}": {
+			"get": {
+				"summary": "Get Bot By Id",
+				"description": "Gets a bot by id",
+				"operationId": "get_bot_by_id_bots__id__get",
+				"parameters": [
+					{
+						"required": true,
+						"schema": {
+							"title": "Id",
+							"type": "string"
+						},
+						"name": "id",
+						"in": "path"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Bot"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"OAuth2PasswordBearer": []
+					}
+				]
+			},
+			"patch": {
+				"summary": "Update Bot By Id",
+				"description": "Updates a bot by id. Does not allow changing the name of default bot.",
+				"operationId": "update_bot_by_id_bots__id__patch",
+				"parameters": [
+					{
+						"required": true,
+						"schema": {
+							"title": "Id",
+							"type": "string"
+						},
+						"name": "id",
+						"in": "path"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateBotRequest"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Bot"
 								}
 							}
 						}
@@ -126,19 +392,71 @@
 	},
 	"components": {
 		"schemas": {
-			"Chat": {
-				"title": "Chat",
+			"Bot": {
+				"title": "Bot",
 				"required": [
-					"messages"
+					"name",
+					"created_at",
+					"prompt",
+					"model_id"
 				],
 				"type": "object",
 				"properties": {
+					"_id": {
+						"title": " Id",
+						"type": "string"
+					},
+					"name": {
+						"title": "Name",
+						"type": "string"
+					},
+					"created_at": {
+						"title": "Created At",
+						"type": "integer"
+					},
+					"prompt": {
+						"title": "Prompt",
+						"type": "string"
+					},
+					"model_id": {
+						"title": "Model Id",
+						"type": "string"
+					}
+				}
+			},
+			"Chat": {
+				"title": "Chat",
+				"required": [
+					"bot"
+				],
+				"type": "object",
+				"properties": {
+					"_id": {
+						"title": " Id",
+						"type": "string"
+					},
+					"bot": {
+						"$ref": "#/components/schemas/Bot"
+					},
+					"created_at": {
+						"title": "Created At",
+						"type": "integer"
+					},
+					"last_message": {
+						"title": "Last Message",
+						"type": "integer",
+						"default": 0
+					},
 					"messages": {
 						"title": "Messages",
 						"type": "array",
 						"items": {
 							"$ref": "#/components/schemas/Message"
-						}
+						},
+						"default": []
+					},
+					"model_context": {
+						"$ref": "#/components/schemas/OpenAIContext"
 					}
 				}
 			},
@@ -158,42 +476,61 @@
 			"Message": {
 				"title": "Message",
 				"required": [
-					"role",
-					"content",
-					"timestamp"
+					"by",
+					"content"
 				],
 				"type": "object",
 				"properties": {
-					"role": {
-						"title": "Role",
+					"created_at": {
+						"title": "Created At",
+						"type": "integer"
+					},
+					"by": {
+						"title": "By",
+						"enum": [
+							"user",
+							"bot"
+						],
 						"type": "string"
 					},
 					"content": {
 						"title": "Content",
 						"type": "string"
-					},
-					"timestamp": {
-						"title": "Timestamp",
-						"type": "integer"
-					},
-					"user_id": {
-						"title": "User Id",
-						"type": "string"
-					},
-					"token_usage": {
-						"$ref": "#/components/schemas/TokenUsage"
 					}
 				}
 			},
-			"NewChatResponse": {
-				"title": "NewChatResponse",
+			"NewBotRequest": {
+				"title": "NewBotRequest",
 				"required": [
-					"chat_id"
+					"prompt",
+					"model_id"
 				],
 				"type": "object",
 				"properties": {
-					"chat_id": {
-						"title": "Chat Id",
+					"name": {
+						"title": "Name",
+						"type": "string"
+					},
+					"prompt": {
+						"title": "Prompt",
+						"type": "string"
+					},
+					"model_id": {
+						"title": "Model Id",
+						"type": "string"
+					}
+				}
+			},
+			"NewChatRequest": {
+				"title": "NewChatRequest",
+				"type": "object",
+				"properties": {
+					"bot_id": {
+						"title": "Bot Id",
+						"type": "string"
+					},
+					"bot_name": {
+						"title": "Bot Name",
 						"type": "string"
 					}
 				}
@@ -201,58 +538,70 @@
 			"NewMessageRequest": {
 				"title": "NewMessageRequest",
 				"required": [
-					"message_content"
+					"content"
 				],
 				"type": "object",
 				"properties": {
-					"message_content": {
-						"title": "Message Content",
+					"content": {
+						"title": "Content",
 						"type": "string"
 					}
 				}
 			},
-			"NewMessageResponse": {
-				"title": "NewMessageResponse",
+			"OpenAIContext": {
+				"title": "OpenAIContext",
 				"required": [
-					"response",
-					"chat_id",
-					"chat"
+					"messages"
 				],
 				"type": "object",
 				"properties": {
-					"response": {
-						"title": "Response",
-						"type": "string"
-					},
-					"chat_id": {
-						"title": "Chat Id",
-						"type": "string"
-					},
-					"chat": {
-						"$ref": "#/components/schemas/Chat"
+					"messages": {
+						"title": "Messages",
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/OpenAIMessage"
+						}
 					}
 				}
 			},
-			"TokenUsage": {
-				"title": "TokenUsage",
+			"OpenAIMessage": {
+				"title": "OpenAIMessage",
 				"required": [
-					"completion_tokens",
-					"prompt_tokens",
-					"total_tokens"
+					"role"
 				],
 				"type": "object",
 				"properties": {
-					"completion_tokens": {
-						"title": "Completion Tokens",
-						"type": "integer"
+					"role": {
+						"title": "Role",
+						"enum": [
+							"system",
+							"assistant",
+							"tool",
+							"user"
+						],
+						"type": "string"
 					},
-					"prompt_tokens": {
-						"title": "Prompt Tokens",
-						"type": "integer"
+					"content": {
+						"title": "Content",
+						"type": "string"
+					}
+				}
+			},
+			"UpdateBotRequest": {
+				"title": "UpdateBotRequest",
+				"type": "object",
+				"properties": {
+					"name": {
+						"title": "Name",
+						"type": "string"
 					},
-					"total_tokens": {
-						"title": "Total Tokens",
-						"type": "integer"
+					"prompt": {
+						"title": "Prompt",
+						"type": "string"
+					},
+					"model_id": {
+						"title": "Model Id",
+						"type": "string"
 					}
 				}
 			},
