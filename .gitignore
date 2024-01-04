@@ -8,6 +8,8 @@
 
 /datastore/*.json
 
+Dockerfile
+
 *.cfg
 *.env
 *.log

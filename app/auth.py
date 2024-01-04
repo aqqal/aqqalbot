@@ -2,9 +2,6 @@ from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends, HTTPException, status
 import pathlib
 import os
-from dotenv import load_dotenv
-
-load_dotenv()
 
 CLIENT_KEY = os.getenv("CLIENT_KEY")
 
