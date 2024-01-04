@@ -15,4 +15,4 @@ app = FastAPI(
 app.include_router(chats_router)
 app.include_router(bots_router)
 
-uvicorn.run(app, log_config=log_config, port=80, host="0.0.0.0")
+uvicorn.run(app, log_config=log_config, port=80, host="0.u0.0.0")
