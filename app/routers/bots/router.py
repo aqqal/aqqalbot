@@ -47,7 +47,7 @@ async def new_bot(body: NewBotRequest):
 		raise HTTPException(status_code=500, detail="Errosr saving bot to db")
 
 	logger.info(f"Saved new bot: {bot}")
-	return jsonable_encoder(bot, by_alias=False)
+	return bot
 
 
 @router.get("", response_model=List[Bot])
@@ -58,9 +58,9 @@ async def get_bots():
 
 	# get all bots from mongo
 	bots = chat_db.bots.find()
-	models = [Bot(**bot) for bot in bots]	
+	bots = [Bot(**bot) for bot in bots]	
 
-	return jsonable_encoder(models, by_alias=False)	
+	return bots
 
 
 
@@ -75,7 +75,7 @@ async def default_bot():
 	if not bot:
 		raise HTTPException(status_code=500, detail="Fatal: default bot not found")
 	
-	return jsonable_encoder(Bot(**bot).dict(), by_alias=False)
+	return bot
 
 
 @router.patch("/default", response_model=Bot)
@@ -100,7 +100,7 @@ async def update_default_bot(body: UpdateBotRequest):
 			raise HTTPException(status_code=400, detail="Cannot change name of default bot")
 		
 	chat_db.bots.update_one({"name": "default_bot"}, {"$set": update})
-	return default_bot()
+	return await default_bot()
 
 
 @router.get("/{id}", response_model=Bot)
@@ -113,7 +113,7 @@ async def get_bot_by_id(id: str):
 	if not bot:
 		raise HTTPException(status_code=404, detail="Bot not found")
 
-	return jsonable_encoder(bot, by_alias=False)
+	return bot
 
 
 @router.patch("/{id}", response_model=Bot)
@@ -142,4 +142,4 @@ async def update_bot_by_id(id: str, body: UpdateBotRequest):
 	chat_db.bots.update_one({"_id": id}, {"$set": update})
 
 	bot = chat_db.bots.find_one({"_id": id})
-	return jsonable_encoder(bot, by_alias=True)
+	return bot
