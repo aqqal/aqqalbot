@@ -30,13 +30,15 @@ async def new_bot(body: NewBotRequest):
 	if bot:
 		raise HTTPException(status_code=400, detail="Bot with name already exists")
 
-
-	bot = Bot(
-		name=body.name,
-		prompt=body.prompt,
-		model_id=body.model_id,
-		created_at=int(time.time())
-	)
+	try:
+		bot = Bot(
+			name=body.name,
+			prompt=body.prompt,
+			model_id=body.model_id,
+			created_at=int(time.time())
+		)
+	except Exception as e:
+		raise HTTPException(status_code=400, detail=str(e))
 
 	bson = jsonable_encoder(bot, by_alias=True)
 	inserted_id = chat_db.bots.insert_one(bson).inserted_id
