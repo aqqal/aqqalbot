@@ -1,11 +1,11 @@
 from fastapi import FastAPI
 
-from app.auth import validate_token
-from app.routers.chats.router import router as chats_router
-from app.routers.bots.router import router as bots_router
+from auth import validate_token
+from routers.chats.router import router as chats_router
+from routers.bots.router import router as bots_router
 
-from app.logger import logger
-from app.config import log_config
+from logger import logger
+from config import log_config
 
 app = FastAPI(
     title="Aqqalbot API Service",
