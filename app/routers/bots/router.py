@@ -5,7 +5,7 @@ from typing import List
 from uuid import uuid4
 import time
 
-from app.routers.bots.models import (
+from routers.bots.models import (
 	NewBotRequest,
 	UpdateBotRequest,
 )
