@@ -33,7 +33,7 @@ router = APIRouter(
 )
 
 
-@router.post("/")
+@router.post("")
 async def new_chat(body: NewChatRequest):
 	"""
 	Creates a new chat with the given bot_id
