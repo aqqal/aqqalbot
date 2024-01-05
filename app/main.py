@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+import uvicorn
 
 from auth import validate_token
 from routers.chats.router import router as chats_router
