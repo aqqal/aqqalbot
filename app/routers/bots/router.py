@@ -37,6 +37,7 @@ async def new_bot(body: NewBotRequest):
 			model_id=body.model_id,
 			created_at=int(time.time())
 		)
+	
 	except Exception as e:
 		raise HTTPException(status_code=400, detail=str(e))
 
@@ -47,7 +48,7 @@ async def new_bot(body: NewBotRequest):
 		raise HTTPException(status_code=500, detail="Errosr saving bot to db")
 
 	logger.info(f"Saved new bot: {bot}")
-	return bot
+	return jsonable_encoder(bot)
 
 
 @router.get("", response_model=List[Bot])
