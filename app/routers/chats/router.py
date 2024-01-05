@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.encoders import jsonable_encoder
-from app.auth import validate_token
+from auth import validate_token
 
 from app.routers.chats.models import (
 	NewChatRequest,

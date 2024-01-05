@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.encoders import jsonable_encoder
-from app.auth import validate_token
+from auth import validate_token
 from typing import List
 from uuid import uuid4
 import time
@@ -13,7 +13,7 @@ from app.routers.bots.models import (
 from datastore.mongoconfig import chat_db
 
 from models.bot import Bot
-from app.logger import logger
+from logger import logger
 
 router = APIRouter(
     prefix="/bots",
